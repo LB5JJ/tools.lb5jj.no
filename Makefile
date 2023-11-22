@@ -1,3 +1,5 @@
+# Copyright 2023 Bård Bjerke Johannessen <bbj@bbj.io>
+#
 # This file is part of the LB5JJ tools website.
 # 
 # The LB5JJ tools website is free software: you can redistribute it and/or modify
