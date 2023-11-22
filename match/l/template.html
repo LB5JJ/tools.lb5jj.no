@@ -1,0 +1,146 @@
+<!doctype html>
+<!--
+This file is part of the LB5JJ tools website.
+
+The LB5JJ tools website is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+The LB5JJ tools website is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with
+the LB5JJ tools website. If not, see <https://www.gnu.org/licenses/>. 
+-->
+<html lang="en" data-theme="light">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+		<title>Impedance matching L-network calculator</title>
+	</head>
+	<body>
+		<main class="container">
+			<h1 style="text-align: center;">Impedance matching L-network calculator</h1>
+			<?php if ($lowpass) { ?>
+			<div class="grid">
+				<div>
+					<table role="grid">
+						<caption style="padding: 16px;">
+						  <strong>
+							Lowpass with <?php echo $lowpass['shunt']; ?> side shunt
+						  </strong>
+						</caption>
+						<tr>
+							<th><strong>C</strong></th>
+							<td><?php echo nice($lowpass['c'], 'F'); ?></td>
+						</tr>
+						<tr>
+							<th><strong>L</strong></th>
+							<td><?php echo nice($lowpass['l'], 'H'); ?></td>
+						</tr>
+						<tr>
+							<th><strong>Q</strong></th>
+							<td><?php echo nice($lowpass['q']); ?></td>
+						</tr>
+					</table>
+				</div>
+				<div><img src="lowpass-<?php echo $lowpass['shunt']; ?>-side-shunt.png"/></div>
+			</div>
+			<hr/>
+			<?php } if ($highpass) { ?>
+			<div class="grid">
+				<div>
+					<table role="grid">
+						<caption style="padding: 16px;">
+						  <strong>
+							Highpass with <?php echo $highpass['shunt']; ?> side shunt
+						  </strong>
+						</caption>
+						<tr>
+							<th><strong>C</strong></th>
+							<td><?php echo nice($highpass['c'], 'F'); ?></td>
+						</tr>
+						<tr>
+							<th><strong>L</strong></th>
+							<td><?php echo nice($highpass['l'], 'H'); ?></td>
+						</tr>
+						<tr>
+							<th><strong>Q</strong></th>
+							<td><?php echo nice($highpass['q']); ?></td>
+						</tr>
+					</table>
+				</div>
+				<div><img src="highpass-<?php echo $lowpass['shunt']; ?>-side-shunt.png"/></div>
+			</div>
+			<hr/>
+			<?php } ?>
+			<form action="/match/l/" method="post">
+				<div class="grid">
+					<label for="rs">
+						R<sub>S</sub>
+						<input type="number" step="1" min="1" id="rs" name="rs"
+							value="<?php echo safe('rs'); ?>"
+							<?php if (isset($error['rs'])) echo ' aria-invalid="true"'; ?>
+							required>
+					</label>
+					<label for="xs">
+						X<sub>S</sub>
+						<input type="number" step="1" id="xs" name="xs"
+							value="<?php echo safe('xs'); ?>"
+							<?php if (isset($error['xs'])) echo ' aria-invalid="true"'; ?>
+							required>
+					</label>
+				</div>
+				<div class="grid">
+					<label for="rl">
+						R<sub>L</sub>
+						<input type="number" step="1" min="1" id="rl" name="rl"
+							value="<?php echo safe('rl'); ?>"
+							<?php if (isset($error['rl'])) echo ' aria-invalid="true"'; ?>
+							required>
+					</label>
+					<label for="xl">
+						X<sub>L</sub>
+						<input type="number" step="1" id="xl" name="xl"
+							value="<?php echo safe('xl'); ?>"
+							<?php if (isset($error['xl'])) echo ' aria-invalid="true"'; ?>
+							required>
+					</label>
+				</div>
+				<div class="grid">
+					<label for="f0">
+						F<sub>0</sub>
+						<input type="number" step="0.01" min="1" id="f0" name="f0"
+							value="<?php echo safe('f0'); ?>"
+							<?php if (isset($error['f0'])) echo ' aria-invalid="true"'; ?>
+							required>
+					</label>
+					<label for="mul">
+						Unit
+						<select type="text" id="mul" name="mul"
+							<?php if (isset($error['mul'])) echo ' aria-invalid="true"'; ?>
+							required>
+							<option value="1"<?php if($_POST['mul'] == 1) echo " selected"; ?>>
+								Hz
+							</option>
+							<option value="1000"<?php if($_POST['mul'] == 1000) echo " selected"; ?>>
+								kHz
+							</option>
+							<option value="1000000"<?php if($_POST['mul'] == 1000000) echo " selected"; ?>>
+								MHz
+							</option>
+							<option value="1000000000"<?php if($_POST['mul'] == 1000000000) echo " selected"; ?>>
+								GHz
+							</option>
+						</select>
+					</label>
+				</div>
+				<input type="submit" value="Calculate"/>
+			</form>
+		</main>
+	</body>
+</html>
